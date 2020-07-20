@@ -15,6 +15,6 @@ spring:
   datasource:
     # mysql5.5 及以上才使用 com.mysql.cj.jdbc.Driver
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/oauth?serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&useSSL=false&verifyServerCertificate=false&autoReconnct=true&autoReconnectForPools=true&allowMultiQueries=true
+    url: jdbc:mysql://127.0.0.1:3306/oauth?serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&useSSL=false&verifyServerCertificate=false&autoReconnct=true&autoReconnectForPools=true&allowMultiQueries=true&allowPublicKeyRetrieval=true
     username: root
     password: ywm735929

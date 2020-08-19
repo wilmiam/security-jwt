@@ -17,6 +17,11 @@ public class JwtUser implements UserDetails {
     public JwtUser() {
     }
 
+    public JwtUser(String username, Collection<? extends GrantedAuthority> authorities) {
+        this.username = username;
+        this.authorities = authorities;
+    }
+
     // 写一个能直接使用user创建jwtUser的构造器
     public JwtUser(User user) {
         id = user.getId();

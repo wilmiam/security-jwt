@@ -1,7 +1,9 @@
 package com.wilmiam.oauth.config;
 
+import com.wilmiam.oauth.entity.JwtUser;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -11,7 +13,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * 验证成功当然就是进行鉴权了
@@ -44,10 +48,16 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         String token = tokenHeader.replace(JwtUtils.TOKEN_PREFIX, "");
         String username = JwtUtils.getUsername(token);
         String role = JwtUtils.getUserRole(token);
+
+        Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(role.split(","))
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+
+        JwtUser jwtUser = new JwtUser(username, authorities);
         if (username != null) {
-            return new UsernamePasswordAuthenticationToken(username, null,
-                    Collections.singleton(new SimpleGrantedAuthority(role))
-            );
+            // 这里的jwtUser是为了后面从SecurityContextHolder取出当前用户
+            return new UsernamePasswordAuthenticationToken(jwtUser, token, jwtUser.getAuthorities());
         }
         return null;
     }

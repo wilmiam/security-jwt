@@ -39,6 +39,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
         // 如果请求头中有token，则进行解析，并且设置认证信息
+        // Security会通过这个来判断有没有携带有效token，如果不设置，就算token有效也会走JWTAuthenticationEntryPoint没有权限错误
         SecurityContextHolder.getContext().setAuthentication(getAuthentication(tokenHeader));
         super.doFilterInternal(request, response, chain);
     }
